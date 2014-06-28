@@ -13,18 +13,18 @@ object FlatBedrock
     @Mod.EventHandler
     def preInit(event: FMLPreInitializationEvent)
     {
-
+        Proxy.preInit
     }
 
     @Mod.EventHandler
     def init(event: FMLInitializationEvent)
     {
-
+        Proxy.init
     }
 
     @Mod.EventHandler
     def postInit(event: FMLPostInitializationEvent)
     {
-        
+        Proxy.postInit
     }
 }
