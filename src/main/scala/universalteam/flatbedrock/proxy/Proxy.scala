@@ -1,20 +1,22 @@
 package universalteam.flatbedrock.proxy
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
+import cpw.mods.fml.common.registry.GameRegistry
+import universalteam.flatbedrock.world.WorldGenFlatBedrock
 
 class CommonProxy
 {
-    def preInit
+    def preInit()
+    {
+        GameRegistry.registerWorldGenerator(new WorldGenFlatBedrock, 10)
+    }
+
+    def init()
     {
 
     }
 
-    def init
-    {
-
-    }
-
-    def postInit
+    def postInit()
     {
 
     }
@@ -23,19 +25,19 @@ class CommonProxy
 class ClientProxy extends CommonProxy
 {
     @SideOnly(Side.CLIENT)
-    override def preInit
+    override def preInit()
     {
         super.preInit()
     }
 
     @SideOnly(Side.CLIENT)
-    override def init
+    override def init()
     {
         super.init()
     }
 
     @SideOnly(Side.CLIENT)
-    override def postInit
+    override def postInit()
     {
         super.postInit()
     }
