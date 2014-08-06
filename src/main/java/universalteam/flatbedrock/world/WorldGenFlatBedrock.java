@@ -16,8 +16,13 @@ public class WorldGenFlatBedrock implements IWorldGenerator
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
 	{
-		if (world.provider.terrainType != WorldType.FLAT)
+		if (canGenerate(world, chunkX, chunkZ))
 			generateWorld(world, chunkX, chunkZ);
+	}
+
+	public boolean canGenerate(World world, int chunkX, int chunkZ)
+	{
+		return world.provider.terrainType != WorldType.FLAT;
 	}
 
 	public void generateWorld(World world, int chunkX, int chunkZ)
