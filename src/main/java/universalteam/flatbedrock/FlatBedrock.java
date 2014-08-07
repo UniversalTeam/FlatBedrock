@@ -7,6 +7,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import universalteam.flatbedrock.lib.Reference;
 import universalteam.flatbedrock.proxies.CommonProxy;
+import universalteam.universalcore.utils.UCLogger;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION, dependencies = "after:UniversalCore")
 public class FlatBedrock
@@ -16,6 +17,8 @@ public class FlatBedrock
 
 	@SidedProxy(clientSide = "universalteam.flatbedrock.proxies.ClientProxy", serverSide = "universalteam.flatbedrock.proxies.CommonProxy")
 	public static CommonProxy proxy;
+
+	public static UCLogger logger = new UCLogger(Reference.MOD_ID);
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event)

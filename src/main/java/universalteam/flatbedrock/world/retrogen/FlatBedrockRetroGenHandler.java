@@ -4,6 +4,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import universalteam.flatbedrock.world.WorldGenFlatBedrock;
 import universalteam.universalcore.world.retrogen.IRetroGenerator;
+import universalteam.universalcore.world.retrogen.RetroactiveWorldGenerator;
 
 import java.util.Random;
 
@@ -11,7 +12,7 @@ public class FlatBedrockRetroGenHandler
 {
 	public static void initRetrogenerators()
 	{
-
+		RetroactiveWorldGenerator.registerRetroGenerator(new RetroGenFlatBedrock());
 	}
 
 	public static class RetroGenFlatBedrock implements IRetroGenerator
@@ -31,7 +32,7 @@ public class FlatBedrockRetroGenHandler
 		@Override
 		public void generate(Random rand, World world, int chunkX, int chunkZ)
 		{
-			WorldGenFlatBedrock.instance.generateWorld(world, chunkX, chunkZ);
+			WorldGenFlatBedrock.instance.retroGenerateWorld(world, chunkX, chunkZ);
 		}
 	}
 }

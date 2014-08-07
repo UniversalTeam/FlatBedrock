@@ -1,17 +1,25 @@
 package universalteam.flatbedrock.world;
 
+import com.google.common.collect.Maps;
 import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.IChunkProvider;
+import universalteam.flatbedrock.custom.CustomDimensionManager;
+import universalteam.flatbedrock.world.retrogen.FlatBedrockRetroGenHandler;
+import universalteam.universalcore.utils.BlockUtil;
+import universalteam.universalcore.world.retrogen.RetroactiveWorldGenerator;
 
+import java.util.Map;
 import java.util.Random;
 
 public class WorldGenFlatBedrock implements IWorldGenerator
 {
 	public static WorldGenFlatBedrock instance = new WorldGenFlatBedrock();
+
+	protected Map<Integer, CustomDimensionManager.DimensionEntry> dimensions = Maps.newHashMap(CustomDimensionManager.getDimensions());
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
@@ -27,21 +35,34 @@ public class WorldGenFlatBedrock implements IWorldGenerator
 
 	public void generateWorld(World world, int chunkX, int chunkZ)
 	{
-		if (world.provider.dimensionId == 0)
-			generateOverworld(world, chunkX, chunkZ);
-		if (world.provider.dimensionId == -1)
-			generateNether(world, chunkX, chunkZ);
+		int id = world.provider.dimensionId;
+
+		if (dimensions.containsKey(id))
+		{
+			CustomDimensionManager.DimensionEntry dimension = dimensions.get(id);
+
+			if (dimension.genBottom)
+				generateBottom(world, chunkX, chunkZ, BlockUtil.getBlockForUniqueName(dimension.fillBlock));
+
+			if (dimension.genTop)
+				generateTop(world, chunkX, chunkZ, BlockUtil.getBlockForUniqueName(dimension.fillBlock));
+		}
 	}
 
-	public void generateOverworld(World world, int chunkX, int chunkZ)
+	public void retroGenerateWorld(World world, int chunkX, int chunkZ)
 	{
-		generateBottom(world, chunkX, chunkZ, Blocks.stone);
-	}
+		int id = world.provider.dimensionId;
 
-	public void generateNether(World world, int chunkX, int chunkZ)
-	{
-		generateBottom(world, chunkX, chunkZ, Blocks.netherrack);
-		generateTop(world, chunkX, chunkZ, Blocks.netherrack);
+		if (dimensions.containsKey(id))
+		{
+			CustomDimensionManager.DimensionEntry dimension = dimensions.get(id);
+
+			if (dimension.retroGenBottom)
+				generateBottom(world, chunkX, chunkZ, BlockUtil.getBlockForUniqueName(dimension.fillBlock));
+
+			if (dimension.retroGenTop)
+				generateTop(world, chunkX, chunkZ, BlockUtil.getBlockForUniqueName(dimension.fillBlock));
+		}
 	}
 
 	public void generateTop(World world, int chunkX, int chunkZ, Block block)
