@@ -39,6 +39,11 @@ public class CustomDimensionManager
 		return INSTANCE.dimensions;
 	}
 
+	public static void addDimensionEntry(DimensionEntry dimension)
+	{
+		INSTANCE.dimensions.put(dimension.dimID, dimension);
+	}
+
 	public void createDefaultJSON()
 	{
 		DimensionEntry overworld = new DimensionEntry(0, false, true, false, false, "minecraft:stone");
@@ -85,10 +90,7 @@ public class CustomDimensionManager
 	public void convertToMap(DimensionEntry[] dimensionEntries)
 	{
 		for (DimensionEntry dimension : dimensionEntries)
-		{
-			dimensions.put(dimension.dimID, dimension);
-			System.out.println(dimension.dimID + " " + dimension.genTop + " " + dimension.genBottom + " " + dimension.retroGenTop + " " + dimension.retroGenBottom + " " + dimension.fillBlock);
-		}
+			addDimensionEntry(dimension);
 	}
 
 	public static class DimensionEntry

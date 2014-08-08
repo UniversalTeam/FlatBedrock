@@ -3,8 +3,10 @@ package universalteam.flatbedrock;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import universalteam.flatbedrock.handler.IMCHandler;
 import universalteam.flatbedrock.lib.Reference;
 import universalteam.flatbedrock.proxies.CommonProxy;
 import universalteam.universalcore.utils.UCLogger;
@@ -36,5 +38,11 @@ public class FlatBedrock
 	public void postInit(FMLPostInitializationEvent event)
 	{
 		proxy.postInit();
+	}
+
+	@Mod.EventHandler
+	public void handleIMCMessages(FMLInterModComms.IMCEvent event)
+	{
+		IMCHandler.processMessages(event.getMessages());
 	}
 }
