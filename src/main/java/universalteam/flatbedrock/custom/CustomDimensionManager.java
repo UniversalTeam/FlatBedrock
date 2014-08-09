@@ -18,6 +18,7 @@ import java.util.Map;
 
 import static universalteam.flatbedrock.FlatBedrock.logger;
 
+//TODO convert to different JSON files for each dimension!
 public class CustomDimensionManager
 {
 	public static final CustomDimensionManager INSTANCE = new CustomDimensionManager();
