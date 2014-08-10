@@ -54,6 +54,11 @@ public class CustomDimensionManager
 		return overworldJSON.exists() && netherJSON.exists();
 	}
 
+	public static boolean doesFileExist(String fileName)
+	{
+		return new File(dimensionsFolder, fileName + ".json").exists();
+	}
+
 	public static void createDefaults()
 	{
 		if (!overworldJSON.exists())
@@ -129,6 +134,11 @@ public class CustomDimensionManager
 			this.retroGenTop = retroGenTop;
 			this.retroGenBottom = retroGenBottom;
 			this.fillBlock = fillBlock;
+		}
+
+		public DimensionEntry()
+		{
+
 		}
 	}
 
