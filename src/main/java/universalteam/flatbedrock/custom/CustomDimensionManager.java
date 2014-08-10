@@ -1,38 +1,44 @@
 package universalteam.flatbedrock.custom;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import cpw.mods.fml.common.event.FMLInterModComms;
 import universalteam.flatbedrock.config.Config;
+import universalteam.flatbedrock.handler.IMCHandler;
+import universalteam.flatbedrock.lib.Reference;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.util.List;
 import java.util.Map;
 
 import static universalteam.flatbedrock.FlatBedrock.logger;
 
-//TODO convert to different JSON files for each dimension!
 public class CustomDimensionManager
 {
 	public static final CustomDimensionManager INSTANCE = new CustomDimensionManager();
 
-	public static final File dimensionsJSON = new File(Config.configLocation, "dimensions.json");
+	public static final File dimensionsFolder = new File(Config.configLocation, "dimensions");
 
+	protected File overworldJSON = new File(dimensionsFolder, "overworld.json");
+	protected File netherJSON = new File(dimensionsFolder, "nether.json");
 	protected Map<Integer, DimensionEntry> dimensions = Maps.newHashMap();
+	protected Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 	public static void execute()
 	{
-		if (!dimensionsJSON.exists())
-			INSTANCE.createDefaultJSON();
+		if (!INSTANCE.doDefaultsExist())
+			INSTANCE.createDefaults();
 
-		INSTANCE.readJSON();
+		IMCHandler.processMessages(FMLInterModComms.fetchRuntimeMessages(Reference.MOD_ID));
+
+		INSTANCE.readJSONFiles();
 	}
 
 	public static Map<Integer, DimensionEntry> getDimensions()
@@ -45,38 +51,58 @@ public class CustomDimensionManager
 		INSTANCE.dimensions.put(dimension.dimID, dimension);
 	}
 
-	public void createDefaultJSON()
+	public boolean doDefaultsExist()
 	{
-		DimensionEntry overworld = new DimensionEntry(0, false, true, false, false, "minecraft:stone");
-		DimensionEntry nether = new DimensionEntry(-1, true, true, false, false, "minecraft:netherrack");
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		List<DimensionEntry> defaultDims = Lists.newArrayList();
-		defaultDims.add(overworld);
-		defaultDims.add(nether);
+		return overworldJSON.exists() && netherJSON.exists();
+	}
+
+	public void createDefaults()
+	{
+		if (!overworldJSON.exists())
+		{
+			DimensionEntry overworld = new DimensionEntry(0, false, true, false, false, "minecraft:stone");
+			createJSONFile("overworld", overworld);
+		}
+
+		if (!netherJSON.exists())
+		{
+			DimensionEntry nether = new DimensionEntry(-1, true, true, false, false, "minecraft:netherrack");
+			createJSONFile("nether", nether);
+		}
+	}
+
+	public void createJSONFile(String fileName, DimensionEntry dimension)
+	{
+		File jsonFile = new File(dimensionsFolder, fileName + ".json");
 
 		try
 		{
-			Files.createParentDirs(dimensionsJSON);
-			Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(dimensionsJSON.getAbsolutePath())));
-			writer.write(gson.toJson(defaultDims));
+			Files.createParentDirs(jsonFile);
+			Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(jsonFile)));
+			writer.write(gson.toJson(dimension));
 			writer.close();
-			logger.info("Creating dimensions.json");
+			logger.info("Creating %s.json file", fileName);
 		}
 		catch (Exception e)
 		{
-			logger.severe("Failed to create the dimensions.json file, please report this!");
+			logger.severe("Failed to create the %s.json file, this could be one of the default files that create on startup or one of the IMC received files, please report this!", fileName);
 			e.printStackTrace();
 		}
 	}
 
-	public void readJSON()
+	public void readJSONFiles()
 	{
-		Gson gson = new Gson();
-		DimensionEntry[] dimensions;
+		for (File file : dimensionsFolder.listFiles(new JSONFileNameFilter()))
+			readJSON(file);
+	}
+
+	public void readJSON(File jsonFile)
+	{
+		DimensionEntry dimension;
 
 		try
 		{
-			dimensions = gson.fromJson(new FileReader(dimensionsJSON), DimensionEntry[].class);
+			dimension = gson.fromJson(new FileReader(jsonFile), DimensionEntry.class);
 		}
 		catch (Exception e)
 		{
@@ -85,7 +111,7 @@ public class CustomDimensionManager
 			return;
 		}
 
-		convertToMap(dimensions);
+		addDimensionEntry(dimension);
 	}
 
 	public void convertToMap(DimensionEntry[] dimensionEntries)
@@ -111,6 +137,15 @@ public class CustomDimensionManager
 			this.retroGenTop = retroGenTop;
 			this.retroGenBottom = retroGenBottom;
 			this.fillBlock = fillBlock;
+		}
+	}
+
+	public static class JSONFileNameFilter implements FilenameFilter
+	{
+		@Override
+		public boolean accept(File dir, String name)
+		{
+			return name.endsWith(".json");
 		}
 	}
 }

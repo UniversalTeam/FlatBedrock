@@ -4,7 +4,6 @@ import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.nbt.NBTTagCompound;
 import universalteam.flatbedrock.custom.CustomDimensionManager;
-import universalteam.flatbedrock.handler.IMCHandler;
 import universalteam.flatbedrock.lib.Reference;
 import universalteam.flatbedrock.world.WorldGenFlatBedrock;
 import universalteam.flatbedrock.world.retrogen.FlatBedrockRetroGenHandler;
@@ -22,8 +21,6 @@ public class CommonProxy
 
 	public void init()
 	{
-		IMCHandler.processMessages(FMLInterModComms.fetchRuntimeMessages(Reference.MOD_ID));
-
 		CustomDimensionManager.execute();
 
 		initWorldGenerators();
