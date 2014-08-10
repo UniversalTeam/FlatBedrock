@@ -22,41 +22,39 @@ import static universalteam.flatbedrock.FlatBedrock.logger;
 
 public class CustomDimensionManager
 {
-	public static final CustomDimensionManager INSTANCE = new CustomDimensionManager();
-
 	public static final File dimensionsFolder = new File(Config.configLocation, "dimensions");
 
-	protected File overworldJSON = new File(dimensionsFolder, "overworld.json");
-	protected File netherJSON = new File(dimensionsFolder, "nether.json");
-	protected Map<Integer, DimensionEntry> dimensions = Maps.newHashMap();
-	protected Gson gson = new GsonBuilder().setPrettyPrinting().create();
+	protected static File overworldJSON = new File(dimensionsFolder, "overworld.json");
+	protected static File netherJSON = new File(dimensionsFolder, "nether.json");
+	protected static Map<Integer, DimensionEntry> dimensions = Maps.newHashMap();
+	protected static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 	public static void execute()
 	{
-		if (!INSTANCE.doDefaultsExist())
-			INSTANCE.createDefaults();
+		if (!doDefaultsExist())
+			createDefaults();
 
 		IMCHandler.processMessages(FMLInterModComms.fetchRuntimeMessages(Reference.MOD_ID));
 
-		INSTANCE.readJSONFiles();
+		readJSONFiles();
 	}
 
 	public static Map<Integer, DimensionEntry> getDimensions()
 	{
-		return INSTANCE.dimensions;
+		return dimensions;
 	}
 
 	public static void addDimensionEntry(DimensionEntry dimension)
 	{
-		INSTANCE.dimensions.put(dimension.dimID, dimension);
+		dimensions.put(dimension.dimID, dimension);
 	}
 
-	public boolean doDefaultsExist()
+	public static boolean doDefaultsExist()
 	{
 		return overworldJSON.exists() && netherJSON.exists();
 	}
 
-	public void createDefaults()
+	public static void createDefaults()
 	{
 		if (!overworldJSON.exists())
 		{
@@ -71,7 +69,7 @@ public class CustomDimensionManager
 		}
 	}
 
-	public void createJSONFile(String fileName, DimensionEntry dimension)
+	public static void createJSONFile(String fileName, DimensionEntry dimension)
 	{
 		File jsonFile = new File(dimensionsFolder, fileName + ".json");
 
@@ -90,13 +88,13 @@ public class CustomDimensionManager
 		}
 	}
 
-	public void readJSONFiles()
+	public static void readJSONFiles()
 	{
 		for (File file : dimensionsFolder.listFiles(new JSONFileNameFilter()))
 			readJSON(file);
 	}
 
-	public void readJSON(File jsonFile)
+	public static void readJSON(File jsonFile)
 	{
 		DimensionEntry dimension;
 
@@ -112,12 +110,6 @@ public class CustomDimensionManager
 		}
 
 		addDimensionEntry(dimension);
-	}
-
-	public void convertToMap(DimensionEntry[] dimensionEntries)
-	{
-		for (DimensionEntry dimension : dimensionEntries)
-			addDimensionEntry(dimension);
 	}
 
 	public static class DimensionEntry
