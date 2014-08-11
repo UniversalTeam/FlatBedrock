@@ -65,6 +65,11 @@ public class IMCHandler
 		else
 			dimension.genBottom = true;
 
+		if (compound.hasKey("fillBlock"))
+			dimension.fillBlock = compound.getString("fillBlock");
+		else
+			dimension.fillBlock = "minecraft:stone";
+
 		dimension.retroGenTop = false;
 		dimension.retroGenBottom = false;
 

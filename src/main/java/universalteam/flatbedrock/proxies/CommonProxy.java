@@ -15,8 +15,6 @@ public class CommonProxy
 	public void preInit()
 	{
 		UCVersionChecker.registerModVersion(new UCVersion(Reference.MOD_VERSION, "https://raw.githubusercontent.com/UniversalTeam/UCModVersions/master/FlatBedrock/version.json"));
-
-		sendTestMessage();
 	}
 
 	public void init()
@@ -41,6 +39,11 @@ public class CommonProxy
 	protected void sendTestMessage()
 	{
 		NBTTagCompound compound = new NBTTagCompound();
+		compound.setString("fileName", "testDimension");
+		compound.setInteger("dimensionID", 555);
+		compound.setBoolean("generateFlatTop", true);
+		compound.setBoolean("generateFlatBottom", false);
+		compound.setString("fillBlock", "minecraft:end_stone");
 		FMLInterModComms.sendRuntimeMessage(Reference.MOD_ID, Reference.MOD_ID, "addDimension", compound);
 	}
 }
