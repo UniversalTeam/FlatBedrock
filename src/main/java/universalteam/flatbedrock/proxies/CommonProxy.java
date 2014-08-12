@@ -1,5 +1,6 @@
 package universalteam.flatbedrock.proxies;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,7 +15,7 @@ public class CommonProxy
 {
 	public void preInit()
 	{
-		UCVersionChecker.registerModVersion(new UCVersion(Reference.MOD_VERSION, "https://raw.githubusercontent.com/UniversalTeam/UCModVersions/master/FlatBedrock/version.json"));
+		initVersionChecker();
 	}
 
 	public void init()
@@ -29,6 +30,19 @@ public class CommonProxy
 	public void postInit()
 	{
 
+	}
+
+	public void initVersionChecker()
+	{
+		if (Loader.isModLoaded("UniversalCore"))
+			UCVersionChecker.registerModVersion(new UCVersion(Reference.MOD_VERSION, "https://raw.githubusercontent.com/UniversalTeam/UCModVersions/master/FlatBedrock/version.json"));
+		else
+		{
+			NBTTagCompound compound = new NBTTagCompound();
+			compound.setString("curseProjectName", "78886-flatbedrockx");
+			compound.setString("curseFilenameParser", "FlatBedrockx-[].jar");
+			FMLInterModComms.sendRuntimeMessage(Reference.MOD_ID, "VersionChecke", "addCurseCheck", compound);
+		}
 	}
 
 	public void initWorldGenerators()

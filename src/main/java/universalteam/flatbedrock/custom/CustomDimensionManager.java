@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import universalteam.flatbedrock.config.Config;
 import universalteam.flatbedrock.handler.IMCHandler;
@@ -17,8 +18,6 @@ import java.io.FilenameFilter;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Map;
-
-import static universalteam.flatbedrock.FlatBedrock.logger;
 
 public class CustomDimensionManager
 {
@@ -84,11 +83,11 @@ public class CustomDimensionManager
 			Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(jsonFile)));
 			writer.write(gson.toJson(dimension));
 			writer.close();
-			logger.info("Creating %s.json file", fileName);
+			FMLLog.info("[%s] Creating %s.json file", Reference.MOD_ID, fileName);
 		}
 		catch (Exception e)
 		{
-			logger.severe("Failed to create the %s.json file, this could be one of the default files that create on startup or one of the IMC received files, please report this!", fileName);
+			FMLLog.severe("[%s] Failed to create the %s.json file, this could be one of the default files that create on startup or one of the IMC received files, please report this!", Reference.MOD_ID, fileName);
 			e.printStackTrace();
 		}
 	}
@@ -109,7 +108,7 @@ public class CustomDimensionManager
 		}
 		catch (Exception e)
 		{
-			logger.severe("Failed to read the dimensions.json file, please report this! This could cause major issues as your settings aren't saved and the world might not generate as you expect! If this was the case you could still try to enable the retro gen in that dimension (but only do this if you really want to keep the world, and also BACKUP)!!!");
+			FMLLog.severe("[%s] Failed to read the %s file, please report this! This could cause major issues as your settings aren't saved and the world might not generate as you expect! If this was the case you could still try to enable the retro gen in that dimension (but only do this if you really want to keep the world, and also BACKUP)!!!", Reference.MOD_ID, jsonFile.getAbsolutePath().substring(jsonFile.getAbsolutePath().lastIndexOf(File.separator) + 1));
 			e.printStackTrace();
 			return;
 		}

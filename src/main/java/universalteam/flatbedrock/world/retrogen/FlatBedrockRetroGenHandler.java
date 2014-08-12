@@ -1,5 +1,6 @@
 package universalteam.flatbedrock.world.retrogen;
 
+import cpw.mods.fml.common.Loader;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import universalteam.flatbedrock.world.WorldGenFlatBedrock;
@@ -12,7 +13,8 @@ public class FlatBedrockRetroGenHandler
 {
 	public static void initRetrogenerators()
 	{
-		RetroactiveWorldGenerator.registerRetroGenerator(new RetroGenFlatBedrock());
+		if (Loader.isModLoaded("UniversalCore"))
+			RetroactiveWorldGenerator.registerRetroGenerator(new RetroGenFlatBedrock());
 	}
 
 	public static class RetroGenFlatBedrock implements IRetroGenerator

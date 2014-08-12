@@ -1,13 +1,13 @@
 package universalteam.flatbedrock.handler;
 
 import com.google.common.collect.Lists;
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import net.minecraft.nbt.NBTTagCompound;
 import universalteam.flatbedrock.custom.CustomDimensionManager;
+import universalteam.flatbedrock.lib.Reference;
 
 import java.util.List;
-
-import static universalteam.flatbedrock.FlatBedrock.logger;
 
 public class IMCHandler
 {
@@ -40,7 +40,7 @@ public class IMCHandler
 			fileName = compound.getString("fileName");
 		else
 		{
-			logger.severe("%s didn't set a fileName value in it's IMC message, aborting! This will not flatten the bedrock in the specified dimension!", modID);
+			FMLLog.severe("[%s] %s didn't set a fileName value in it's IMC message, aborting! This will not flatten the bedrock in the specified dimension!", Reference.MOD_ID, modID);
 			return;
 		}
 
@@ -51,7 +51,7 @@ public class IMCHandler
 			dimension.dimID = compound.getInteger("dimensionID");
 		else
 		{
-			logger.severe("%s didn't set a dimensionID value in it's IMC message, aborting! This will not flatten the bedrock in the specified dimension!", modID);
+			FMLLog.severe("[%s] %s didn't set a dimensionID value in it's IMC message, aborting! This will not flatten the bedrock in the specified dimension!", Reference.MOD_ID, modID);
 			return;
 		}
 
