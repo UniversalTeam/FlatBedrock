@@ -2,15 +2,13 @@ package universalteam.flatbedrock.world;
 
 import com.google.common.collect.Maps;
 import cpw.mods.fml.common.IWorldGenerator;
+import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.IChunkProvider;
 import universalteam.flatbedrock.custom.CustomDimensionManager;
-import universalteam.flatbedrock.world.retrogen.FlatBedrockRetroGenHandler;
-import universalteam.universalcore.utils.BlockUtil;
-import universalteam.universalcore.world.retrogen.RetroactiveWorldGenerator;
 
 import java.util.Map;
 import java.util.Random;
@@ -42,10 +40,10 @@ public class WorldGenFlatBedrock implements IWorldGenerator
 			CustomDimensionManager.DimensionEntry dimension = dimensions.get(id);
 
 			if (dimension.genBottom)
-				generateBottom(world, chunkX, chunkZ, BlockUtil.getBlockForUniqueName(dimension.fillBlock));
+				generateBottom(world, chunkX, chunkZ, GameData.getBlockRegistry().getObject(dimension.fillBlock));
 
 			if (dimension.genTop)
-				generateTop(world, chunkX, chunkZ, BlockUtil.getBlockForUniqueName(dimension.fillBlock));
+				generateTop(world, chunkX, chunkZ, GameData.getBlockRegistry().getObject(dimension.fillBlock));
 		}
 	}
 
@@ -58,10 +56,10 @@ public class WorldGenFlatBedrock implements IWorldGenerator
 			CustomDimensionManager.DimensionEntry dimension = dimensions.get(id);
 
 			if (dimension.retroGenBottom)
-				generateBottom(world, chunkX, chunkZ, BlockUtil.getBlockForUniqueName(dimension.fillBlock));
+				generateBottom(world, chunkX, chunkZ, GameData.getBlockRegistry().getObject(dimension.fillBlock));
 
 			if (dimension.retroGenTop)
-				generateTop(world, chunkX, chunkZ, BlockUtil.getBlockForUniqueName(dimension.fillBlock));
+				generateTop(world, chunkX, chunkZ, GameData.getBlockRegistry().getObject(dimension.fillBlock));
 		}
 	}
 
