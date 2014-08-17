@@ -24,7 +24,7 @@ public class CommonProxy
 
 		initWorldGenerators();
 
-		FlatBedrockRetroGenHandler.initRetrogenerators();
+		initRetroGenerators();
 	}
 
 	public void postInit()
@@ -48,6 +48,12 @@ public class CommonProxy
 	public void initWorldGenerators()
 	{
 		GameRegistry.registerWorldGenerator(new WorldGenFlatBedrock(), 10);
+	}
+
+	public void initRetroGenerators()
+	{
+		if (Loader.isModLoaded("UniversalCore"))
+			FlatBedrockRetroGenHandler.initRetrogenerators();
 	}
 
 	protected void sendTestMessage()
