@@ -8,14 +8,12 @@ import universalteam.flatbedrock.custom.CustomDimensionManager;
 import universalteam.flatbedrock.lib.Reference;
 import universalteam.flatbedrock.world.WorldGenFlatBedrock;
 import universalteam.flatbedrock.world.retrogen.FlatBedrockRetroGenHandler;
-import universalteam.universalcore.version.UCVersion;
-import universalteam.universalcore.version.UCVersionChecker;
 
 public class CommonProxy
 {
 	public void preInit()
 	{
-		initVersionChecker();
+
 	}
 
 	public void init()
@@ -30,19 +28,6 @@ public class CommonProxy
 	public void postInit()
 	{
 
-	}
-
-	public void initVersionChecker()
-	{
-		if (Loader.isModLoaded("UniversalCore"))
-			UCVersionChecker.registerModVersion(new UCVersion(Reference.MOD_VERSION, "https://raw.githubusercontent.com/UniversalTeam/UCModVersions/master/FlatBedrock/version.json"));
-		else
-		{
-			NBTTagCompound compound = new NBTTagCompound();
-			compound.setString("curseProjectName", "78886-flatbedrockx");
-			compound.setString("curseFilenameParser", "FlatBedrockx-[].jar");
-			FMLInterModComms.sendRuntimeMessage(Reference.MOD_ID, "VersionChecke", "addCurseCheck", compound);
-		}
 	}
 
 	public void initWorldGenerators()
